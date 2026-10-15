@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+harmonycircle.db
+.venv/
+.env
+static/uploads/*.pdf

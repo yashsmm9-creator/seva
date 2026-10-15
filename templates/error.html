@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}{{ code }}{% endblock %}{% block content %}<section class="empty-state error-state"><div class="empty-icon">{{ code }}</div><h1>Something went off track.</h1><p>{{ message }}</p><a class="button button-primary" href="{{ url_for('index') }}">Return to HarmonyCircle ↗</a></section>{% endblock %}

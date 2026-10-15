@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}HarmonyCircle{% endblock %} · Build a better society</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="site-header"><div class="nav-wrap">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">h<span>+</span></span><span>harmony<span class="brand-light">circle</span><small>BUILD A BETTER SOCIETY</small></span></a>
+  <nav class="main-nav"><a href="{{ url_for('index') }}">Explore</a>{% if current_user() %}<a href="{{ url_for('dashboard') }}">My dashboard</a><a href="{{ url_for('new_problem') }}">Post a problem</a><a href="{{ url_for('notifications') }}" class="notification-link">Notifications{% if notification_count %}<span class="notification-count">{{ notification_count }}</span>{% endif %}</a>{% endif %}</nav>
+  <div class="nav-actions">{% if current_user() %}<span class="welcome">Hi, {{ current_user().name.split(' ')[0] }}</span><form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><button class="button button-quiet button-small" type="submit">Log out</button></form>{% else %}<a class="button button-quiet button-small" href="{{ url_for('login') }}">Log in</a><a class="button button-primary button-small" href="{{ url_for('register') }}">Join HarmonyCircle <span>↗</span></a>{% endif %}</div>
+</div></header>
+<main class="page-shell">
+  {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="site-footer"><div class="footer-inner"><a class="brand footer-brand" href="{{ url_for('index') }}"><span class="brand-mark">h<span>+</span></span><span>harmony<span class="brand-light">circle</span><small>SMALL ACTS. STRONGER COMMUNITIES.</small></span></a><p>Good things happen when we show up for each other.</p><span>Made for people, by people.</span></div></footer>
+<script>
+  document.querySelectorAll('[data-problem-type]').forEach(function(radio){
+    function update(){ const eventFields=document.querySelector('[data-event-fields]'); if(!eventFields)return; const active=document.querySelector('[data-problem-type]:checked'); const show=active && active.value==='event'; eventFields.hidden=!show; eventFields.querySelectorAll('[data-event-required]').forEach(function(el){el.required=!!show;}); }
+    radio.addEventListener('change',update); update();
+  });
+  document.querySelectorAll('[data-file-input]').forEach(function(input){input.addEventListener('change',function(){const label=document.querySelector('[data-file-label]');if(label)label.textContent=input.files.length?input.files[0].name:'Choose a PDF (up to 8 MB)';});});
+</script>
+</body></html>
